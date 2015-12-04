@@ -1,0 +1,82 @@
+--- vector-features-with-text.html	(revision 12369)
++++ vector-features-with-text.html	(working copy)
+@@ -22,28 +22,43 @@
+             renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+             
+             var vectorLayer = new OpenLayers.Layer.Vector("Simple Geometry", {
+-                styleMap: new OpenLayers.StyleMap({'default':{
+-                    strokeColor: "#00FF00",
+-                    strokeOpacity: 1,
+-                    strokeWidth: 3,
+-                    fillColor: "#FF5500",
+-                    fillOpacity: 0.5,
+-                    pointRadius: 6,
+-                    pointerEvents: "visiblePainted",
+-                    // label with \n linebreaks
+-                    label : "name: ${name}\n\nage: ${age}",
+-                    
+-                    fontColor: "${favColor}",
+-                    fontSize: "12px",
+-                    fontFamily: "Courier New, monospace",
+-                    fontWeight: "bold",
+-                    labelAlign: "${align}",
+-                    labelXOffset: "${xOffset}",
+-                    labelYOffset: "${yOffset}"
+-                }}),
++                styleMap: new OpenLayers.StyleMap(
++                    new OpenLayers.Style(
++                    {
++                        strokeColor: "#00FF00",
++                        strokeOpacity: 1,
++                        strokeWidth: 3,
++                        fillColor: "#FF5500",
++                        fillOpacity: 0.5,
++                        pointRadius: 6,
++                        pointerEvents: "visiblePainted",
++                        label : "name: ${name},\nage: ${age}",
++                        labelHaloColor: "${getHaloColor}",
++                        labelHaloWidth: "${getHaloWidth}",
++                        
++                        fontColor: "${favColor}",
++                        fontSize: "12px",
++                        fontFamily: "Courier New, monospace",
++                        fontWeight: "bold",
++                        labelAlign: "${align}",
++                        labelXOffset: "${xOffset}",
++                        labelYOffset: "${yOffset}"
++                   },
++                   {
++                       context: {
++                             getHaloColor: function(feature) {
++                                return feature.attributes["haloColor"] || "";
++                            },
++                             getHaloWidth: function(feature) {
++                                return feature.attributes["haloWidth"] || "";
++                            }
++                       }
++                   }
++                )),
+                 renderers: renderer
+             });
+             
++            
+             // create a point feature
+             var point = new OpenLayers.Geometry.Point(-111.04, 45.68);
+             var pointFeature = new OpenLayers.Feature.Vector(point);
+@@ -87,6 +102,7 @@
+                     name: "ball-and-chain",
+                     age: 30,
+                     favColor: 'black',
++                    haloColor: 'white',
+                     align: 'rt'
+                 });
+ 
+@@ -97,6 +113,8 @@
+                 name: "offset",
+                 age: 22,
+                 favColor: 'blue',
++                haloColor: '#FFA500',
++                haloWidth: 6,
+                 align: "cm",
+                 // positive value moves the label to the right
+                 xOffset: 50,

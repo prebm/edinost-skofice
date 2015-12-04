@@ -1,0 +1,12 @@
+--- examples/wfs-protocol.html	(revision 12369)
++++ examples/wfs-protocol.html	(working copy)
+@@ -25,7 +25,8 @@
+                     protocol: new OpenLayers.Protocol.WFS({
+                         url:  "http://demo.opengeo.org/geoserver/wfs",
+                         featureType: "tasmania_roads",
+-                        featureNS: "http://www.openplans.org/topp"
++                        //featureNS: "http://www.openplans.org/topp"
++                        featurePrefix: "topp"
+                     })
+                 });
+ 

@@ -1,0 +1,63 @@
+--- SVG.js	(revision 12369)
++++ SVG.js	(working copy)
+@@ -677,14 +677,27 @@
+      * featureId - {String}
+      * style -
+      * location - {<OpenLayers.Geometry.Point>}
++     * drawHalo - {Boolean}
+      */
+-    drawText: function(featureId, style, location) {
++    drawText: function(featureId, style, location, drawHalo) {
++        // First draw text in halo color and size and overlay the 
++        // normal text afterwards
++        if (style.labelHaloColor) {
++            var haloStyle = OpenLayers.Util.extend({}, style);
++            haloStyle.fontColor = haloStyle.labelHaloColor;
++            haloStyle.fontStrokeColor = haloStyle.labelHaloColor;
++            haloStyle.fontStrokeWidth = style.labelHaloWidth || 2;
++            delete haloStyle.labelHaloColor;
++            this.drawText(featureId, haloStyle, location, true);
++        }
++         
+         var resolution = this.getResolution();
+ 
+         var x = (location.x / resolution + this.left);
+         var y = (location.y / resolution - this.top);
+ 
+-        var label = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX, "text");
++        var haloSuffix = drawHalo ? this.HALO_ID_SUFFIX : "";
++        var label = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX + haloSuffix, "text");
+ 
+         label.setAttributeNS(null, "x", x);
+         label.setAttributeNS(null, "y", -y);
+@@ -692,6 +705,12 @@
+         if (style.fontColor) {
+             label.setAttributeNS(null, "fill", style.fontColor);
+         }
++        if (style.fontStrokeColor) {
++            label.setAttributeNS(null, "stroke", style.fontStrokeColor);
++        }
++        if (style.fontStrokeWidth) {
++            label.setAttributeNS(null, "stroke-width", style.fontStrokeWidth);
++        }
+         if (style.fontOpacity) {
+             label.setAttributeNS(null, "opacity", style.fontOpacity);
+         }
+@@ -728,11 +747,16 @@
+             label.removeChild(label.lastChild);
+         }
+         for (var i = 0; i < numRows; i++) {
+-            var tspan = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX + "_tspan_" + i, "tspan");
++            var tspan = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX 
++                            + haloSuffix + "_tspan_" + i, "tspan");
+             if (style.labelSelect === true) {
+                 tspan._featureId = featureId;
+                 tspan._geometry = location;
+                 tspan._geometryClass = location.CLASS_NAME;
++                // Allow for setting cursor attribute
++                if (style.cursor != null) {
++                    label.setAttributeNS(null, "cursor", style.cursor);
++                }
+             }
+             if (OpenLayers.IS_GECKO === false) {
+                 tspan.setAttributeNS(null, "baseline-shift",

@@ -1,0 +1,32 @@
+--- lib/OpenLayers/Renderer/SVG.js	(revision 12369)
++++ lib/OpenLayers/Renderer/SVG.js	(working copy)
+@@ -677,14 +677,27 @@
+      * featureId - {String}
+      * style -
+      * location - {<OpenLayers.Geometry.Point>}
++     * drawHalo - {Boolean}
+      */
+-    drawText: function(featureId, style, location) {
++    drawText: function(featureId, style, location, drawHalo) {
++        // First draw text in halo color and size and overlay the 
++        // normal text afterwards
++        if (style.labelHaloColor) {
++            var haloStyle = OpenLayers.Util.extend({}, style);
++            haloStyle.fontColor = haloStyle.labelHaloColor;
++            haloStyle.fontStrokeColor = haloStyle.labelHaloColor;
++            haloStyle.fontStrokeWidth = style.labelHaloWidth || 2;
++            delete haloStyle.labelHaloColor;
++            this.drawText(featureId, haloStyle, location, true);
++        }
++         
+         var resolution = this.getResolution();
+ 
+         var x = (location.x / resolution + this.left);
+         var y = (location.y / resolution - this.top);
+ 
+-        var label = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX, "text");
++        var haloSuffix = drawHalo ? this.HALO_ID_SUFFIX : "";
++        var label = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX + haloSuffix, "text");
+ 
+         label.setAttributeNS(null, "x", x);
+         label.setAttributeNS(null, "y", -y);

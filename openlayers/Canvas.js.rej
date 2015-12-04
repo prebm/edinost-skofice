@@ -1,0 +1,14 @@
+--- Canvas.js	(revision 12369)
++++ Canvas.js	(working copy)
+@@ -534,6 +534,11 @@
+                 this.canvas.measureText('xx').width;
+             pt[1] += lineHeight*vfactor*(numRows-1);
+             for (var i = 0; i < numRows; i++) {
++                if (style.labelHaloColor) {
++                    this.canvas.strokeStyle = style.labelHaloColor;
++                    this.canvas.lineWidth = style.labelHaloWidth || 2;
++                    this.canvas.strokeText(labelRows[i], pt[0], pt[1] + (lineHeight*i));
++                }
+                 this.canvas.fillText(labelRows[i], pt[0], pt[1] + (lineHeight*i));
+             }
+         } else if (this.canvas.mozDrawText) {

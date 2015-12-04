@@ -1,0 +1,296 @@
+@charset "utf-8";
+
+/*@font-face {
+    font-family: 'calibripw';
+    src: url('../fonts/calibripwa-regular-webfont.eot');
+    src: url('../fonts/calibripwa-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/calibripwa-regular-webfont.woff') format('woff'),
+         url('../fonts/calibripwa-regular-webfont.ttf') format('truetype'),
+         url('../fonts/calibripwa-regular-webfont.svg#CalibriPWRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}*/
+
+body { 
+	background: #fff; 
+	font-family: 'open_sansbregular', Helvetica, Arial, sans-serif;
+	/*font-family: calibripw, Helvetica, Arial, sans-serif;*/ 
+}
+h3{
+	font-size: 1.3em;
+	margin: 0 0 0.4em 0.2em;
+	font-family: 'open_sansbregular', Helvetica, Arial, sans-serif;
+	font-weight: bold;
+}
+h4{
+	margin: 1.3em 0 0.2em 0;
+	font-weight: bold;
+}
+a img{
+	text-decoration:none;
+	border: none;
+}
+a { text-decoration: none;color: #0c6cbd;}
+a:hover { text-decoration: underline;}
+a.image, a.image:hover, a img  {border:0;}
+a:active, a:link, a:hover, a:visited {border: 0; outline: 0;}
+
+#logo {
+	background: #ffffff url("../img/logo_bg.png") repeat-x 0 0; 
+	height:50px; 
+	margin-top:0px;
+	position: absolute; 
+	padding-top:5px;
+	width: 100%;
+	left: 0px;
+}
+#logo-right {
+	background: #ffffff url("../img/logo_bg_t.png") repeat-x top center; 
+	height:50px; 
+	margin-top:0px;
+	position: absolute; 
+	padding-top:5px;
+	width: 420px;
+	right: 0px;
+	
+}
+#tab{
+	position: absolute;
+	left: -32px;
+	top: 0;
+	
+}
+#overlay {
+    position: absolute;
+    top: 60px;
+    left:10px; 
+	bottom:10px; 
+	right:10px;
+	/*padding-top: 40px;*/
+    background-color: #fff;
+    opacity: 0.95;
+    z-index: 10000;
+    display:none;
+    /*border-bottom: 1px solid #aaa;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;*/
+    
+}
+#left-nav {
+	width:20%;
+	float:left;
+	font-size:95%;
+	margin-left 40px;
+	padding-top: 40px;
+}
+#left-nav ul {
+	list-style-type: none;
+}
+#left-nav li {
+	padding:4px 0;
+}
+#text-main {
+	float:left;
+	width:50%;
+	font-size:90%;
+	padding-top: 40px;
+	padding-bottom: 40px;
+	padding-left: 20px;
+}
+#text-main .hidden-text{
+	display: none;
+}
+.de{
+	font-style: italic;
+}
+.pesem{
+	color:#08487c;
+}
+#map { 
+	position:absolute; 
+	top:60px; 
+	left:10px; 
+	bottom:10px; 
+	right:10px;
+	/*dummer IE*/
+	/*height:92.5%; 
+	width:98.5%;*/
+	background-color:#fff; 
+	border:1px solid #aaa; 
+}
+#karten {
+	position:absolute;
+	top:25px;
+	right: 20px;
+}
+#layerswitchButton { 
+	width:50px; 
+	height:30px; 
+	position:absolute; 
+	top:63px;
+	right: 13px; 
+}
+#layerswitch { 
+	width:180px; 
+	height:50px; 
+	position:absolute; 
+	top:95px;
+	right: 12px; 
+	padding: 5px;
+	/*padding-bottom: 5px;
+	padding-left:15px;*/
+	background-color:#fff; 
+	border:1px solid #999;
+}
+#legendaButton { 
+	width:50px; 
+	height:30px; 
+	position:absolute; 
+	top:63px;
+	left: 118px; 
+	
+	/*background-color:#fff; 
+	border:1px solid #aaa;*/
+}
+#legenda { 
+	width:180px; 
+	height:550px; 
+	position:absolute; 
+	top:110px;
+	left: 12px; 
+	padding-left:0.5em;
+	background-color:#fff; 
+	border:1px solid #999;
+}
+
+a#sources {
+	position:absolute;
+	bottom:15px;
+	right:15px;
+	/*text-decoration:none;
+	color:#000000;*/
+	font-size: 0.8em;
+}
+a#feedback {
+	position:absolute;
+	bottom:15px;
+	right:50px;
+	/*text-decoration:none;
+	color:#000000;*/
+	font-size: 0.8em;
+}
+a#navodila {
+	position:absolute;
+	top:63px;
+	left: 173px; 
+    width: 160px;
+    height:23px;
+    margin:0;  
+    text-decoration: none;
+    text-align: center;
+	font-family: 'Open Sans Condensed', sans-serif; 
+    border: 1px solid #999;
+    color: black; background-color: #fff;
+    /*box-shadow:6px 6px 6px #666;*/
+}
+a:hover#navodila {
+	background-color: #ddd;
+    color: #333;
+}
+
+/* ################# ZOOM BUTTONS ################# */
+.olControlPanel div { 
+  display:inline-block;
+  width:  50px;
+  height: 30px;
+  margin: 0;
+  margin-top:2px;
+  margin-left:2px;
+  background-color:white;
+  cursor: pointer;
+}
+
+.olControlPanel .olControlZoomOutItemActive { 
+  margin-left:1px;
+  background-image: url("../img/zoomOut.png");
+}
+.olControlPanel .olControlZoomOutItemInactive { 
+  margin-left:1px;
+  background-image: url("../img/zoomOut.png");
+}
+.olControlPanel .olControlZoomInItemActive { 
+  
+  background-image: url("../img/zoomIn.png");
+}
+.olControlPanel .olControlZoomInItemInactive { 
+  
+  background-image: url("../img/zoomIn.png");
+}
+
+/* #################### Attribution ####################### */
+
+.olControlAttribution {
+	font-size: 0.6em !important;
+	padding: 2px !important;
+	bottom: 3px !important;
+	left: 3px !important;
+	padding: 2px 4px !important;
+}
+
+/* #################### panToVas ####################### */
+
+div#panToVas {
+    position:absolute; 
+	top:63px;
+	right: 67px;
+}
+ul#Navigation {
+	margin: 0; padding: 0;
+    text-align: center;
+}
+ul#Navigation li {
+    list-style: none;
+    float: left;  
+    position: relative;
+}
+ul#Navigation li ul {
+    margin: 0; padding: 0;
+    position: absolute;
+    display: none;  /* Unternavigation ausblenden */
+}
+ul#Navigation li:hover ul {
+    display: block;			/* Unternavigation in modernen Browsern einblenden */
+    background-color: #999;  
+}
+ul#Navigation li ul li {
+    float: none;
+    display: block;
+    margin: 1px 0;
+}
+ul#Navigation a, ul#Navigation span {
+    display: block;
+    width: 160px;
+    height:23px;
+    margin:0;  
+    text-decoration: none;
+	font-family: 'Open Sans Condensed', sans-serif; 
+    border: 1px solid #fff;
+    color: black; background-color: #fff;
+}
+ul#Navigation p{
+	display: block;
+    width: 160px;
+    height:23px;
+    margin:0;  
+    text-decoration: none;
+	font-family: 'Open Sans Condensed', sans-serif; 
+/*    border: 1px solid #fff;*/
+    color: black; background-color: #fff;
+	border: 1px solid #999;}
+ul#Navigation a:hover, ul#Navigation span, li a#aktuell {
+    border-color: #ddd;
+    background-color: #ddd;
+    color: #333;
+}

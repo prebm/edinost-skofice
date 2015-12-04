@@ -1,0 +1,14 @@
+--- lib/OpenLayers/Renderer/VML.js	(revision 12369)
++++ lib/OpenLayers/Renderer/VML.js	(working copy)
+@@ -54,7 +54,10 @@
+         if (!document.namespaces.olv) {
+             document.namespaces.add("olv", this.xmlns);
+             var style = document.createStyleSheet();
+-            var shapes = ['shape','rect', 'oval', 'fill', 'stroke', 'imagedata', 'group','textbox']; 
++            var shapes = [
++                'shape','rect', 'oval', 'fill', 'stroke', 'imagedata', 'group','textbox', 
++                'fill', 'stroke', 'path', 'textpath' // for new textpath
++            ]; 
+             for (var i = 0, len = shapes.length; i < len; i++) {
+ 
+                 style.addRule('olv\\:' + shapes[i], "behavior: url(#default#VML); " +

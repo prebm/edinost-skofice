@@ -1,0 +1,21 @@
+--- OpenLayers/Renderer/NG.js	(revision 12369)
++++ OpenLayers/Renderer/NG.js	(working copy)
+@@ -106,12 +106,16 @@
+      * {DOMElement} container holding the text label (to be populated by
+      * subclasses)
+      */
+-    drawText: function(featureId, style, location) {
++    drawText: function(featureId, style, location, drawHalo) {
+         var label;
++        var haloSuffix = drawHalo ? this.HALO_ID_SUFFIX : "";
++        //var haloSuffix = "";
++
+         if (typeof featureId !== "string") {
+             label = featureId;
+         } else {
+-            label = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX, this.labelNodeType);
++            label = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX 
++                                        + haloSuffix, this.labelNodeType);
+             label._featureId = featureId;
+         }
+         label._style = style;

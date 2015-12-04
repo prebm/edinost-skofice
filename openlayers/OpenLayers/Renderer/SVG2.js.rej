@@ -1,0 +1,60 @@
+--- OpenLayers/Renderer/SVG2.js	(revision 12369)
++++ OpenLayers/Renderer/SVG2.js	(working copy)
+@@ -578,19 +578,43 @@
+      * Returns:
+      * {DOMElement} container holding the text label
+      */
+-    drawText: function(featureId, style, location) {
++    drawText: function(featureId, style, location, drawHalo) {
++        // First draw text in halo color and size and overlay the 
++        // normal text afterwards
++        if (style.labelHaloColor) {
++            var haloStyle = OpenLayers.Util.extend({}, style);
++            haloStyle.fontColor = haloStyle.labelHaloColor;
++            haloStyle.fontStrokeColor = haloStyle.labelHaloColor;
++            haloStyle.fontStrokeWidth = style.labelHaloWidth || 2;
++            delete haloStyle.labelHaloColor;
++            this.drawText(featureId, haloStyle, location, true);
++        }
++         
+         var g = OpenLayers.Renderer.NG.prototype.drawText.apply(this, arguments);
+-        var text = g.firstChild ||
+-            this.nodeFactory(featureId + this.LABEL_ID_SUFFIX + "_text", "text");
++        var haloSuffix = drawHalo ? this.HALO_ID_SUFFIX : "";
++        var haloSuffix = "";
+ 
++console.info('drawHalo', drawHalo);        
++console.info('g', g);        
++        var text = g.firstNode || this.nodeFactory(featureId + this.LABEL_ID_SUFFIX +
++                                         haloSuffix + "_text", "text");
++console.info('text', text);        
++
+         var res = this.getResolution();
+         text.setAttributeNS(null, "x", location.x / res);
+         text.setAttributeNS(null, "y", - location.y / res);
++console.info('location', location.x/res, location.y/res);
+         g.setAttributeNS(null, "transform", "scale(" + res + ")");
+ 
+         if (style.fontColor) {
+             text.setAttributeNS(null, "fill", style.fontColor);
+         }
++        if (style.fontStrokeColor) {
++            text.setAttributeNS(null, "stroke", style.fontStrokeColor);
++        }
++        if (style.fontStrokeWidth) {
++            text.setAttributeNS(null, "stroke-width", style.fontStrokeWidth);
++        }
+         if (style.fontOpacity) {
+             text.setAttributeNS(null, "opacity", style.fontOpacity);
+         }
+@@ -628,7 +652,9 @@
+         }
+         for (var i = 0; i < numRows; i++) {
+             var tspan = text.childNodes[i] ||
+-                this.nodeFactory(featureId + this.LABEL_ID_SUFFIX + "_tspan_" + i, "tspan");
++                this.nodeFactory(featureId + this.LABEL_ID_SUFFIX 
++                                     + haloSuffix + "_tspan_" + i, "tspan");
++
+             if (style.labelSelect === true) {
+                 tspan._featureId = featureId;
+             }

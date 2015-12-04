@@ -1,0 +1,201 @@
+--- OpenLayers/Renderer/VML.js	(revision 12369)
++++ OpenLayers/Renderer/VML.js	(working copy)
+@@ -54,7 +54,10 @@
+         if (!document.namespaces.olv) {
+             document.namespaces.add("olv", this.xmlns);
+             var style = document.createStyleSheet();
+-            var shapes = ['shape','rect', 'oval', 'fill', 'stroke', 'imagedata', 'group','textbox']; 
++            var shapes = [
++                'shape','rect', 'oval', 'fill', 'stroke', 'imagedata', 'group','textbox', 
++                'fill', 'stroke', 'path', 'textpath' // for new textpath
++            ]; 
+             for (var i = 0, len = shapes.length; i < len; i++) {
+ 
+                 style.addRule('olv\\:' + shapes[i], "behavior: url(#default#VML); " +
+@@ -817,8 +820,180 @@
+      * featureId - {String}
+      * style -
+      * location - {<OpenLayers.Geometry.Point>}
++     * useHalo - {Boolean}
+      */
+-    drawText: function(featureId, style, location) {
++    drawText: function (featureId, style, location, useHalo) {
++
++        // If the user wants a halo, first draw the text with a
++        // thick stroke (using the halo color) and then draw the
++        // text normally over that
++        // Idea from:
++        // http://www.mail-archive.com/svg-developers@yahoogroups.com/msg01002.html
++        if (style.labelHaloColor) {
++            var haloStyle = OpenLayers.Util.extend({}, style);
++            haloStyle.fontStrokeColor = haloStyle.labelHaloColor;
++            haloStyle.fontStrokeWidth = haloStyle.labelHaloWidth || 2;
++            delete haloStyle.labelHaloColor;
++            this.drawText(featureId, haloStyle, location, true);
++        }
++
++        var label = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX + 
++                (useHalo ? this.HALO_ID_SUFFIX : ""), "olv:shape");
++
++        // Add it to the DOM hierarchy
++        if(!label.parentNode) {
++            this.textRoot.appendChild(label);
++        }
++
++        // Set its dimension and position attributes
++        var resolution = this.getResolution();
++        label.style.left = ((location.x/resolution - this.offset.x) | 0) + "px";
++        label.style.top = ((location.y/resolution - this.offset.y) | 0) + "px";
++        label.style.flip = "y";
++        label.style.position = "absolute";
++        label.style.width = 1 + "px"; // some dummy value
++        label.style.height = 1 + "px"; // some dummy value
++        label.style.antialias = "true";
++        /*
++        var nodeStyle = { fillColor: style.fontColor,
++            fillOpacity: style.fontOpacity,
++            strokeColor: style.fontStrokeColor,
++            strokeWidth: style.fontHaloSize || 2,
++            strokeOpacity: style.fontOpacity
++
++        }
++        var nodeOptions = {
++            isFilled:  style.fontColor,
++            isStroked: style.fontStrokeColor 
++        }
++
++        this.setStyle(label, nodeStyle, nodeOptions, null);
++        */
++
++
++        // Create the fill object
++        var myFill = document.createElement("olv:fill");
++        myFill.on = "true";
++        myFill.color = style.fontColor;
++
++        // Add it to the DOM hierarchy
++        label.appendChild(myFill);
++
++        // Create the stroke object. We need to define the 
++        // stroke explicitly, otherwise we get a default 
++        // black outline
++        var myStroke = document.createElement("olv:stroke");
++        if (style.fontStrokeColor) {
++            myStroke.on = "true";
++            myStroke.color = style.fontStrokeColor;
++        } else {
++            myStroke.on = "false";
++        }
++
++        if (style.fontStrokeWidth) {
++            myStroke.weight = style.fontStrokeWidth;
++        } 
++
++        // Add it to the DOM hierarchy
++        label.appendChild(myStroke);
++
++        // Create the path object
++        var path = document.createElement("olv:path");
++        path.textpathok = "True";
++        path.v = "m 0,0 l 200,0";
++
++        // Add it to the DOM hierarchy
++        label.appendChild(path);
++
++        // Create the textpath object
++        var textpath = document.createElement("olv:textpath");
++        textpath.on = "true";
++        textpath.fitpath = "false";
++        textpath.string = style.label;
++
++        label.appendChild(textpath);
++
++        if (style.cursor != "inherit" && style.cursor != null) {
++            label.style.cursor = style.cursor;
++        }
++
++        if (style.fontColor) {
++            textpath.style.color = style.fontColor;
++        }
++        if (style.fontOpacity) {
++            myFill.opacity = style.fontOpacity;
++            myStroke.opacity = style.fontOpacity;
++        }
++
++        // Setting the font family does not seem to work
++        // TODO: make this work!
++        if (style.fontFamily) {
++            textpath.style.fontfamily = style.fontFamily;
++            //textpath.style['font-family'] = style.fontFamily;
++            label.style.fontFamily = style.fontFamily;
++        }
++
++        // We need to set the fontSize to prevent JS errors
++        textpath.style.fontSize = style.fontSize || 10;
++
++        if (style.fontWeight) {
++            textpath.style.fontWeight = style.fontWeight;
++        }
++
++        if (style.fontStyle) {
++            textpath.style.fontStyle = style.fontStyle;
++        }
++
++        var align = style.labelAlign || "cm";
++        if (align.length == 1) {
++            align += "m";
++        }
++
++        // Set the horizontal align
++        var hAlign;
++        switch (align.substr(0,1)) {
++            case 'l': hAlign = "left"; break;
++            case 'c': hAlign = "center"; break;
++            case 'r': hAlign = "right"; break;
++        }
++        textpath.style['v-text-align'] = hAlign;
++        if(style.labelSelect === true) {
++            label._featureId = featureId;
++            textpath._featureId = featureId;
++            textpath._geometry = location;
++            textpath._geometryClass = location.CLASS_NAME;
++            //label._geometry = location;
++            //label._geometryClass = location.CLASS_NAME;
++        }
++
++        // Somehow our label is 1 pixel off horizontally
++        // TODO: find out what causes it and then fix it
++        var xshift = 1; // hack
++        label.style.left = parseInt(label.style.left)+xshift+"px";
++
++        // Set the vertical align by using the fontSize as the height
++        // We default to 0.5 in case style.labelAlign comes from a
++        // variable like "${labelAlign}" as happens when an OL.Graticule
++        // ends up in a GeoExt LegenPanel
++        var yshift = parseInt(textpath.style.fontSize) *
++            (OpenLayers.Renderer.VML.LABEL_SHIFT[align.substr(1,1)] || 0.5);
++
++        // somehow our label is about 10 pixels off vertically
++        // TODO: find out what causes it and then fix it
++        yshift -= 7; 
++        label.style.top = parseInt(label.style.top)+yshift+"px";
++
++    },
++    
++    /**
++     * This method is only called by the renderer itself.
++     * 
++     * Parameters: 
++     * featureId - {String}
++     * style -
++     * location - {<OpenLayers.Geometry.Point>}
++     */
++    drawTextOLD: function(featureId, style, location) {
+         var label = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX, "olv:rect");
+         var textbox = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX + "_textbox", "olv:textbox");
+         
+@@ -1018,3 +1193,4 @@
+     "m": .5,
+     "b": 1
+ };
++

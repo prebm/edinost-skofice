@@ -1,0 +1,28 @@
+--- OpenLayers/Renderer/Elements.js	(revision 12369)
++++ OpenLayers/Renderer/Elements.js	(working copy)
+@@ -392,6 +392,12 @@
+      * {String}
+      */
+     LABEL_ID_SUFFIX: "_label",
++
++     /**
++     * Constant: HALO_ID_SUFFIX
++     * {String}
++     */
++    HALO_ID_SUFFIX: "_halo",
+     
+     /**
+      * Constructor: OpenLayers.Renderer.Elements
+@@ -836,6 +842,12 @@
+         var label = document.getElementById(featureId + this.LABEL_ID_SUFFIX);
+         if (label) {
+             this.textRoot.removeChild(label);
++
++            var labelHalo = document.getElementById(featureId + 
++                this.LABEL_ID_SUFFIX + this.HALO_ID_SUFFIX);
++            if (labelHalo) {
++                this.textRoot.removeChild(labelHalo);
++            }
+         }
+     },
+ 

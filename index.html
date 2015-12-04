@@ -1,1 +1,610 @@
-Hello Škofiče!
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Interaktivni zemljevid | Interaktive Karte</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<link rel="icon" type="image/png" href="img/favicon.ico">
+		
+<!-- 		<link rel="stylesheet" type="text/css" href="openlayers/custom/theme/default/style.css"> -->
+		<link rel="stylesheet" type="text/css" href="openlayers/theme/default/style.css">
+		<link rel="stylesheet" href="fonts/font-stylesheet.css" type="text/css" charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="styles/style.css">
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+		<!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400&subset=latin,latin-ext' rel='stylesheet' type='text/css'> -->
+		
+    	<!-- <script type="text/javascript" src="openlayers/lib/OpenLayers.js"></script> -->
+    	<script type="text/javascript" src="openlayers/custom/OL-gorjanci.js"></script>
+	 	<script type="text/javascript" src="myClasses/MySVG.js"></script>
+    	<script type="text/javascript" src="js/map.js"></script>
+    	<script language="JavaScript" src="js/slideH.js"></script>
+    	<script language="JavaScript" src="js/slideW.js"></script>
+    	
+    	<script type="text/javascript">
+	    	//tab on/off
+	    	function overlay(mode) {
+				if(mode == 'display') {
+					document.getElementById("overlay").style.display="block"
+					document.getElementById("tab").src="img/tab2_bg.png"
+				} else if(mode == 'hide') {
+					document.getElementById("overlay").style.display="none"
+					document.getElementById("tab").src="img/tab1_bg.png"
+				}
+			}
+	    	
+	    	//text-change
+	    	//TODO: de-slo?
+	    	function changeText(id){
+	    		var nodes = document.getElementById("text-main").childNodes;
+	    		for (var key in nodes){
+	    			if(nodes[key].className == "visible-text"){
+	    				nodes[key].className = "hidden-text";
+	    			}
+	    		}
+	    		document.getElementById("tex"+id).className = "visible-text"
+	    	}
+	    	
+    	</script>
+    	<!--################################# shadowbox ################################-->
+			<link rel="stylesheet" type="text/css" href="shadowbox-3.0.3/shadowbox.css">
+			<script type="text/javascript" src="shadowbox-3.0.3/shadowbox.js"></script>
+			
+			<!--[if lte IE 8]>
+				<script type="text/javascript">
+				Shadowbox.init({displayNav: false, modal:true, initialHeight: 600, initialWidth:800});
+				function openit() {
+	
+				    // open a welcome message as soon as the window loads
+				    Shadowbox.open({
+				        content:    'html/ie.html',
+				        player:     "iframe",
+				        title:      "Pozdravljen/Willkommen",
+				        height:     400,
+				        width:      800
+				    });
+				};
+				window.setTimeout("openit()",100);
+				</script> 
+			<![endif]-->
+			
+			<script type="text/javascript">
+				Shadowbox.init();
+			</script>
+		<!--################################# shadowbox end ################################-->
+	</head>
+	<body onload="init();">
+		
+		<div id="logo">
+			<a href="#" onclick="return overlay('hide')"><img src="img/karta_logo_deslo.png" alt="karta logo" style="margin-left: 10px"/></a>
+			<img src="img/edinost_logo_tr.png" alt="skofice logo"/>
+			
+		</div>
+ 		<div id="logo-right">
+			<img id="tab" src="img/tab1_bg.png" alt="skofice logo" />
+			<a href="#" onclick="return overlay('display')"><img src="img/vec_logo.png" alt="Več ... | Mehr ..." style="margin-left: 40px"/></a>
+		</div>
+		<div id="overlay">
+			<div id="close" style="float:right;padding-right:40px;"><a href="#" onclick="return overlay('hide')"><img src="img/close.png" alt="Zapri"/></a></div>
+			<div id="left-nav">
+				<ul id"ul-slo">
+					<li id="li-1"><a href="#" id="t-1-slo" onclick="return changeText(this.id)">O nastajanju zemljevida</a></li>
+					<li id="li-2"><a href="#" id="t-2-slo" onclick="return changeText(this.id)">UNESCO: Seznam nesnovne kulturne dediščine v Avstriji</a></li>
+					<li id="li-3"><a href="#" id="t-3-slo" onclick="return changeText(this.id)">Škofiče – kraj narave in kulture</a></li>
+					<li id="li-4"><a href="#" id="t-4-slo" onclick="return changeText(this.id)">Zanimivosti v občini Škofiče</a></li>
+					<li id="li-5"><a href="#" id="t-5-slo" onclick="return changeText(this.id)">Ledinska imena: Zrcalo pokrajine in človeka</a></li>
+					<li id="li-6"><a href="#" id="t-6-slo" onclick="return changeText(this.id)">Hišna imena</a></li>
+				</ul>
+				<ul id"ul-de">
+					<li id="li-1"><a href="#" id="t-1-de" class="de" onclick="return changeText(this.id)">Zur Enstehung der Karte</a></li>
+					<li id="li-2"><a href="#" id="t-2-de" class="de" onclick="return changeText(this.id)">UNESCO: Register des immate­riellen Kulturerbes in Österreich</a></li>
+					<li id="li-3"><a href="#" id="t-3-de" class="de" onclick="return changeText(this.id)">Schiefling am Wörthersee – ein Ort der Natur und der Kultur</a></li>
+					<li id="li-4"><a href="#" id="t-4-de" class="de" onclick="return changeText(this.id)">Interessantes und Sehenswertes in der Gemeinde Schiefling am See</a></li>
+					<li id="li-5"><a href="#" id="t-5-de" class="de" onclick="return changeText(this.id)">Flurnamen: Spiegel der Geschichte</a></li>
+					<li id="li-6"><a href="#" id="t-6-de" class="de" onclick="return changeText(this.id)">Hausnamen</a></li>
+					<li id="li-7"><a href="#" id="t-7-de" onclick="return changeText(this.id)">Viri / Quellen</a></li>
+				</ul>
+				
+			</div>
+			<div id="text-main">
+				<div id="text-1-slo" class="visible-text">
+					Pobudnik tega zemljevida je Slovensko prosvetno društvo Edinost Ško­fiče. Gradivsko osnovo za izvirna ledinska in hišna imena sta prispevala Kotmirčan Jozi Pak 
+					s karto narečnih imen in Terezija Pörtsch, p.d. Janšinja, z vaško kroniko, objavljeno v seriji »Na poti skozi vas«. Narečna poimenovanja je v pogovorih z 
+					domačini več let dopolnjevala Magda Er­renst, strokovno pa so jih obdelali na Slovenskem narodopisnem inšti­tutu Urban Jarnik. Na zemljevidu so številna 
+					doslej le v govoru ohranjena imena zapisana in posneta prvič. Narečna imena so zapisana v poenostavljeni tran­skripciji, ki sledi pravilom dialektologije, hkrati pa 
+					omogoča berljivost teh imen v najširšem krogu ljudi. Naglasno mesto je označeno, kjer se razlikuje od običajnega knjižnega. Pri izdelavi zemljevida smo 
+					upoštevali kartografska pravila in njegovo namembnost.<br />
+					Izdaja zemljevida je nujnost in potreba sodobnega časa, v katerem stara domača imena z naglico izginjajo zaradi gospodarskih in jezikovno­ kulturnih družbenih 
+					sprememb. Pred skoraj 100 leti, leta 1910, je od 1271 škofiških občanov le 73 ljudi uporabljalo nemščino kot občevalni jezik. Danes je razmerje močno 
+					spremenjeno, skorajda na glavo posta­vljeno; uporaba domačega slovenskega jezika močno nazaduje, tudi zato, ker v javnosti nima ustrezne veljave. 
+					Po drugi strani pa danes Ev­ropska skupnost odpira meje in tako širi odprtost med ljudmi. Danes se poleg materinega jezika bolj in bolj učimo tudi 
+					jezik soseda in vsaj še en svetovni jezik. Najbližji sosedni jezik na Koroškem je domača slo­venščina, domače narečje, ki je do nedavnega bila v večini 
+					družin tudi družinski jezik. Prav zaradi tega bodo na tem zemljevidu zapisana na­rečna imena mnoge tudi pospremila na pot otroštva in na pot spomina na 
+					domačo govorico babic in dedejev, ki so obdajajočo naravo in pre­bivalce vasi poimenovali s podedovanimi ali novimi izvirnimi domačimi imeni v slovenskem narečju.
+					<br /><br />
+					Mag. Magda Errenst, Paprače<br />
+					Predsednica Slovenskega prosvetnega društva Edinost Škofiče
+				</div>
+				<div id="text-1-de" class="hidden-text">
+					Die vorliegende Karte slowenischer Flur­ und Hofnamen in der Markt­gemeinde Schiefling am Wörthersee/Škofiče entstand auf Anregung des örtlichen slowenischen 
+					Kulturvereins SPD Edinost Škofiče/Schiefling. Die Grundlagen für die Erstellung der Karte waren die Sammeltätigkeit von Jozi Pak aus Köttmannsdorf/Kotmara 
+					vas und die Dorfchronik von The­resia Pörtsch, vlg. Janšinja, sowie die fachlichen Dokumentationen des Slowenischen Volkskundeinstitutes Urban Jarnik in 
+					Klagenfurt/Celovec. Vervollständigt wurde sie durch die mehrjährige Sammeltätigkeit von Magda Errenst und die Mithilfe der Einheimischen.<br />
+					In unserem zweisprachigen Raum war jahrhundertelang das ge­schriebene Wort meist deutsch, das slowenische Wort hingegen lebte überwiegend in gesprochener 
+					mundartlicher Form. Daraus ergab und erhielt sich bis heute ein historisch bedingtes Gefühl der Über­- und Un­terordnung, das dazu führte, dass die Sprache 
+					in vielen Familien aus dem Alltag gedrängt wurde.<br />
+					Auch aus dieser Sicht ist die Herausgabe der Karte eine Notwendig­keit. Man muss sich vergegenwärtigen, dass vor ca. 100 Jahren, nämlich 1910, von 
+					1271 Schieflinger Bürgern nur 73 Deutsch als Umgangsspra­che benutzt haben, heute hingegen sind die Verhältnisse fast umge­kehrt. Wurde früher die 
+					Sprache in den Familien natürlich weitertra­diert, sind heute zur Erhaltung der slowenischen Sprache, insbesondere der Mundart, besondere Anstrengungen 
+					notwendig. Auch diese Karte ist ein Teil davon.<br />
+					Die Erfassung der Flurnamen für die vorliegende Karte erfolgte in der slowenischen Mundart, um sie in ihrer authentischen Form zu erhalten: Die Namen sind in 
+					mündlicher Überlieferung lebendig erhalten geblie­ben und werden auch nur durch mündliche Weitergabe lebendig blei­ben!<br />
+					Diese Namen sind sprachliche und kulturelle Kostbarkeiten, die un­seren älteren Mitbewohnern am stärksten in Erinnerung sind.
+					Ein großer Teil der bisher mündlich im slowenischen Dialekt überlie­ferten Namen ist auf dieser Karte erstmals verschriftlicht und aufgenommen. Bei der Vor­bereitung der 
+					Karte wurden die Richtlinien der Kartographie und die Ziel­setzungen der Karte berücksichtigt.<br />
+					Zielpublikum der Karte sind sowohl die einheimische Bevölkerung, die damit die schon fast verborgene ursprüngliche sprachliche und kulturelle Vielfalt ihrer 
+					näheren Heimat wieder entdecken soll, als auch Gäste, die hier Erholung und Muse suchen und dabei neben den natürlichen Schön­heiten unserer Gemeinde auch 
+					ihre sprachlich­kulturelle Vielfalt entde­cken und kennenlernen sollen.<br /><br />
+					Mag. Magda Errenst, Farrendorf/Paprače<br />
+					Obfrau des slowenischen Kulturvereins Edinost Škofiče/Schiefling
+				</div>
+				<div id="text-2-slo" class="hidden-text">
+					Marca 2010 so bila slovenska ledinska in hišna imena na Koroškem sprejeta
+					v seznam nesnovne kulturne dediščine v Avstriji. Prošnjo za vpis
+					so podpisala kulturna društva, ki se trudijo za ohranitev slovenskih imen.<br />
+					Slovenska ledinska in hišna imena so živa kulturna dediščina, ki je globoko
+					zasidrana v zavesti slovensko in nemško govorečih Korošcev, ta
+					imena so tudi bistven del kulturne in narodne identitete koroških Slovencev.
+					Dokumentacija imen je pomembna za razumevanje gospodarskega
+					in socialnozgodovinskega razvoja Koroške. Mnoga slovenska
+					imena so živa le v ustnem izročilu in do danes še niso bila zapisana.<br />
+					Pričujoči zemljevid to izročilo ohranja v pisni in slišni podobi, v smislu Unescove
+					konvencije pa naj bi imena ostala predvsem v živi rabi. Tako kot
+					ohranjamo bisere naše materialne dediščine, je tudi naša nematerialna
+					– duhovna dediščina zaklad, ki ga je treba ohraniti za naslednje rodove.
+				</div>
+				<div id="text-2-de" class="hidden-text">
+					Im März 2010 wurden die slowenischen Flur- und Hofnamen in Kärnten
+					ins Verzeichnis des immateriellen Kulturerbes in Österreich aufgenommen.
+					Der Antrag zur Aufnahme in dieses Verzeichnis wurde von slowenischen
+					Kulturvereinen unterschrieben, die sich um die Erhaltung der
+					slowenischen Namen bemühen.<br />
+					Die slowenischen Flur- und Hofnamen sind ein tief im Bewusstsein
+					der slowenisch- und deutschsprachigen Kärntner verankertes lebendiges
+					Kulturgut, diese Namen sind auch ein wesentlicher Teil der kulturellen
+					und nationalen Identität der Kärntner Slowenen. Sie sind wichtig
+					für das Verstehen der wirtschaftlichen und sozialhistorischen
+					Entwicklung Kärntens.<br />
+					Viele slowenische Namen sind nur im mündlichen Gebrauch lebendig
+					und wurden bis heute noch nicht schriftlich festgehalten. Die Karte
+					dokumentiert das überlieferte Namensgut in schriftlicher und hörbarer Form, im
+					Sinne der UNESCO-Konvention sollen die Namen auch im mündlichen
+					Gebrauch erhalten bleiben. So wie wir die Juwelen unseres materiellen
+					Kulturerbes erhalten, ist auch unser immaterielles – geistiges Erbe ein
+					wertvoller Schatz, der es wert ist, an die kommenden Generationen weitergegeben
+					zu werden.
+				</div>
+				<div id="text-3-slo" class="hidden-text">
+					Škofiče imajo bogato krajevno zgodovino. O zgodnjih naselitvah pričajo
+					izkopanine na Jerberku in nedavno odkrita votlina s svetiščem za sončnega
+					boga Mitro v Gradišču na Ravnah. V občinskem grbu, ki ga je občina
+					prejela leta 1991, simboli ponazarjajo bogato zgodovino kraja. Zlata
+					konica na spodnjem robu grba predstavlja Jerberk, kjer so našli izkopanine
+					iz srednje kamene dobe od 7. do 6. stoletja pred Kristusom, iz časa
+					pozne bronaste dobe ter iz rimske dobe med 2. in 5. stoletjem po Kristusu.
+					V grbu je tudi zlata škofovska palica, ki spominja na prve omembe
+					kraja v listinah kot »Schueflich«. Nemško ime Schiefling je glasovno in
+					besedotovrno ponemčeno ime za slovensko ime »Škof(lj)iče« in pomeni
+					»škofovska vas«. Med ustanovitelji Škofič so brižinski škofje, ki so že v 9.
+					stoletju na južni strani Vrbskega jezera imeli pomembno misijonsko središče
+					– Marija na Otoku. Preklano sodno kolo s sedmimi prečkami na
+					grbu predstavlja atribut sv. Katarine, ki so ji na Jerberku verjetno že v 12.
+					stoletju postavili cerkev, čeprav je izpričana šele v začetku 16. stoletja.<br />
+					»Škofišče bvate« so območje močvirij in jezer v Škofičah in Hodišah,
+					ki so jih leta 2005 sprejeli v seznam Ramsarjevih območij, kar daje kraju
+					mednarodni pomen. Na območju Škofič in Hodiš so v ledeni dobi bila jezera
+					z močvirji, do danes je ohranjeno naravno močvirnato področje,
+					ki je dom za številne ogrožene živali in rastline. Občina si prizadeva za
+					dolgotrajno ohranitev te pomembne kulturne krajine.
+					<br /><br />
+					<div class="pesem">
+						Juhe, pojdam v Šҟuәfәče, <br />
+						juhe, s Šҟuәfәč pa v Paprače, <br />
+						juhe, s Paprač pa v Pinjo ves, <br />
+						juhe, k Mojcijә v ves.
+					</div>
+					<br />
+					V venčku narodnih, ki ga je priredil Pavle Kernjak, najdemo domača imena za vasi v Škofičah.<br />
+					Skladatelj, organist, zborovodja in harmonizator ljudskih pesmi Pavle Kernjak (1899–1979) iz Šentilja 
+					ob Dravi je kot samouk in samorastnik v pristni ljudski šegavosti ter z domiselnimi in prikupnimi 
+					priredbami osvojil pevke, pevce in pevske zbore.<br />
+					Njegova uglasbitev pesmi Rož, Podjuna, Zila je postala koroška ljudska himna.
+					
+					<h4>Slovensko prosvetno društvo Edinost Škofiče</h4>
+					SPD Edinost Škofiče je bilo ustanovljeno 22. januarja 1905 kot izobraževalno
+					in pevsko društvo. Od ustanovitve je namen društva ohranjanje
+					slovenskega jezika in kulture v domačem kraju.<br />
+					
+					Isti cilj so si stavile še dodatne slovenske škofiške ustanove: dvojezični otroški vrtec 
+					<a href="http://www.mladinskidom.at/slo/vrtec-slo.htm" target="_blank">MINKA</a>, ustanovljen leta 1985, 
+					<a href="http://www.posojilnica-bank.at"  target="_blank">Posojilnica-Bank Škofiče</a>, ustanovljena leta 
+					1902 in Zadruga Škofiče, ustanovljena leta 1948. 
+				</div>
+				<div id="text-3-de" class="hidden-text">
+					Schiefling am Wörthersee/Škofiče hat eine bedeutende Geschichte. Von
+					früher Besiedelung des Ortes zeugen die Ausgrabungen auf dem Kathreinkogel/
+					Jerberk und die kürzlich entdeckte Kultstätte für den Sonnengott
+					Mithra in Gradišče in Raunach. Im Gemeindewappen, welches
+					die Gemeinde 1991 erhielt, verdeutlichen die Symbole die reiche Vergangenheit
+					des Ortes. Die goldene Spitze im Schildfuß stellt den Kathreinkogel
+					dar, wo man Siedlungsspuren aus der mittleren Steinzeit vom
+					7. bis 6. Jahrhundert vor Christus, aus der Spätbronzezeit und aus der
+					Römerzeit zwischen dem 2. und 5. Jahrhundert nach Christus nachgewiesen
+					hat. Das Wappen enthält auch den goldenen Bischofsstab. Der
+					deutsche Name Schiefling ist eine verballhornte Form für den slowenischen
+					Namen »Škof(lj)iče« und bedeutet »bischöfliches Dorf«. Die
+					Gründer von Schiefling/Škofiče waren die Freisinger Bischöfe, die schon
+					im 9. Jahrhundert auf der südlichen Seite des Wörthersees ein bedeutendes
+					Missionszentrum hatten – Maria Wörth. Das zerbrochene Richtrad
+					mit den sieben Speichen stellt das Attribut der Hl. Katharina dar, der
+					zu Ehren auf dem Kathreinkogel wahrscheinlich schon im 12. Jahrhundert
+					eine Kirche errichtet wurde, obwohl sie erst Anfang des 16. Jahrhundert
+					urkundlich belegt ist.<br />
+					Die Moor- und Seenlandschaft Keutschach-Schiefling wurde im Jahr
+					2005 in die Ramsar-Liste der Feuchtgebiete von internationaler Bedeutung
+					aufgenommen.<br />
+					Es handelt sich bei diesem Gebiet um eine eiszeitliche Seenlandschaft.
+					Bis heute ist dieses natürliche Moorgebiet erhalten, das unzähligen
+					zum Teil gefährdeten Tier- und Pflanzenarten Lebensraum bietet.
+					Die Gemeinde bemüht sich diese einzigartige Kulturlandschaft nachhaltig
+					zu erhalten.
+					<br /><br />
+					<div class="pesem">
+						Juhe, pojdam v Šҟuәfәče, <br />
+						juhe, s Šҟuәfәč pa v Paprače, <br />
+						juhe, s Paprač pa v Pinjo ves, <br />
+						juhe, k Mojcijә v ves.
+					</div>
+					<br /><br />
+					Slowenische Dialektnamen für die Ortschaften in Schiefling/Škofiče fin­den wir auch 
+					im Volksliedreigen des slowenischen Komponisten Pavle Kernjak.<br />
+					Der Komponist, Organist, Chorleiter und Harmonist von slowe­nischen Volksliedern 
+					Pavle Kernjak (1899 – 1979) hat als Autodidakt mit seinem authentischen volkstümlichen 
+					Humor sowie einfallsreichen und ansprechenden Kompositionen Sängerinnen, Sänger und Chöre erobert.<br />
+					Seine Vertonung des slowenischen Liedes Rož, Podjuna, Zila ist zu ei­ner Art Hymne der 
+					Kärntner Slowenen geworden, besingt sie doch die drei Täler Rosental, Jauntal und Gailtal, 
+					in denen die Slowenen in Kärn­ten siedeln.
+					
+					<h4>Der Slowenische Kulturverein Edinost Škofiče/Schiefling</h4>
+					Der Slowenische Kulturverein Edinost Škofiče/Schiefling wurde am 22.
+					Jänner 1905 als slowenischer Bildungs und Gesangsverein gegründet.
+					Seit seiner Gründung bemüht sich der Kulturverein um die Erhaltung der
+					slowenischen Sprache und Kultur in seinem Heimatort.<br />
+					
+					Dasselbe Ziel verfolgen auch die weiteren slowenischen Institutionen, wie der 
+					<a href="http://www.mladinskidom.at/slo/vrtec-slo.htm" target="_blank">zweisprachige Kindergarten MINKA/ dvojezični otroški vrtec MINKA</a>, 
+					gegründet im Jahr 1985, die <a href="http://www.posojilnica-bank.at"  target="_blank">Posojilnica-Bank Škofiče/Schiefling</a>, 
+					gegründet im Jahr 1902 und die Genossenschaft/ Zadruga Škofiče/Schiefling, gegründet im Jahr 1948. 
+				</div>
+				<div id="text-4-slo" class="hidden-text">
+					<h4>Izkopanine na Jerberku</h4>
+					Najdbe na Jerberku pričajo o tem, da so območje od 7./6. tisočletja naseljevali
+					mesolitski nabiralci, od 3. tisočletja neolitski kmetje. Izpričana
+					je tudi naselitev v poznobronasti dobi. Pomembna najdba je predhistorični
+					tkalski stol, ki so ga našli na gospodarskem mestu iz časa 12. in 11.
+					stoletja pred Kristusom. Iz obdobja zgodnjega rimskega časa od 2. do
+					5. stoletja po Kristusu je na gorski planoti ohranjen rimski kaštel z zgodnjekrščansko
+					dvoransko cerkvijo, pod katerim so ohranjena grobišča.
+					Arheološki muzej, ki je bil zgrajen v letih 1986/87, ponuja na ogled najdene
+					eksponate in informacije o krajevni in širši zgodovini, kot tudi vpogled
+					v delo arheologov.
+					
+					<h4>Votlina s svetiščem v Hrašiščah (Gradišče na Ravnah)</h4>
+					Bila je do časa pokristjanjevanja svetišče za kult sončnega boga Mitre, ki
+					je nastal v Mali Aziji in se razširil po celotnem rimskem imperiju.
+					
+					<h4>Mejnik med Ilirijo in Avstrijo</h4>
+					V bližini Strnišča – Fanturja še danes stoji mejnik iz leta 1811, iz časa
+					francoske zasedbe. Leta 1779 so Koroško zavzeli Francozi in jo s presledki
+					imeli v svoji oblasti do leta 1813. Meja med provinco Ilirijo, kakor se je
+					imenovala pokrajina pod francosko oblastjo, je potekala preko Šentilja
+					na Dob in skozi Log do Vrbskega jezera. Na Muti (mitnica), domače ime
+					gostilne Bürger, še danes priča o francoski zasedbi.
+					
+					<h4>Kašče</h4>
+					V Škofičah so ohranjene tri stare kašče: pri Sušcu (iz leta 1597), pri Zimi
+					in pri Strdenu (iz leta 1559). Služile so za skladiščenje desetine, ki jo je
+					pobirala proštnija na Otoku. Kašče imajo spodaj klet, zgoraj pa je bila
+					shramba za žito in meso.
+					
+					<h4>Paštәba</h4>
+					Ime paštәba ali paštba izhaja iz nemške besede »Badstube«, kopalnica.
+					V paštәbi je bila peč, zato je lahko služila tudi kot sušilnica lanu, konoplje
+					in sadja. V Škofičah so jo uporabljali tudi za peko kruha ali kot preužitkarsko
+					hišo za starejšo generacijo.
+					
+					<h4>Terične jame</h4>
+					Zaradi nevarnosti požara so terične jame bile izkopane v zemljo ob robu
+					vasi. Iz »rant« so nad jamo pripravili stojalo, da so nad ognjem sušili lanene
+					rastline. Nato so jih predvsem ženske terice lomile (trle) z lesenimi
+					koli. Tako so pridobili predivo, ki so ga uporabljali za domače tkanine.
+					
+					<h4>Žalik žene</h4>
+					Žalik žene so po pripovedovanjih bivale na Krni in nad Otožem, kjer so
+					v skalo vklesani sedeži oz. vdolbine, iz česar naj bi izviralo ime Sedlaže
+					Na tem kraju so žalik žene svetovale kmetom, kaj naj sejejo, in ponavljale:
+					»Pavr, sej bob!«. Kmetje, ki so jih ubogali, so imeli dobro letino
+					to pomoč pa so morali »odslužiti« z naravnimi proizvodi. Zaradi tega naj
+					bi bile kmetice na žalik žene zelo ljubosumne.
+				</div>
+				<div id="text-4-de" class="hidden-text">
+					<h4>Ausgrabungen auf dem Kathreinkogel/Jerberk</h4>
+					Der Kathreinkogel war seit dem 7. Jahrtausend vor Christus besiedelt.
+					Oberflächenfunde weisen darauf hin, dass bereits mesolithische Jäger
+					und Sammler (7./6. Jahrtausend v. Chr.) und neolithische Bauern
+					(3. Jahrtausend v. Chr.) den Berg als Siedlungsplatz genutzt haben.
+					Durch archäologische Ausgrabungen konnte auch eine spätbronzezeitliche
+					Siedlung nachgewiesen werden. Auf einer westseitigen Hangterrasse
+					wurde eine bemerkenswerte Wirtschaftsstelle aus dem 12. und
+					11. Jahrhundert vor Christus freigelegt, deren wichtigster Fund ein prähistorischer
+					Vertikal-Webstuhl ist. Aus der römischen Zeit (2. bis 5. Jh.
+					n. Chr.) befindet sich auf dem Gipfelplateau ein rund 10.000 m² großes
+					Kastell mit frühchristlicher Saalkirche, etwas tiefer liegt das dazugehörige
+					Gräberfeld. Das Haus der Archäologie (errichtet in den Jahren
+					1986/87) stellt die ausgegrabenen Exponate zur Schau und bietet Informationen
+					zur Orts- und Menschheitsgeschichte sowie einen Einblick
+					in die Arbeit der Archäologen.
+					
+					<h4>Heidnischer Kultplatz in Gradišče bei Raunach</h4>
+					Er war bis in die christliche Zeit Heiligtum für den in Kleinasien entstandenen
+					und über das gesamte römische Reich verbreiteten Kult des
+					Mithras-Sonnengottes.
+					
+					<h4>Grenzstein zwischen Illyrien und Österreich</h4>
+					In der Nähe des Hotels Fantur, vlg. Strnišč, befindet sich noch heute ein
+					Grenzstein aus dem Jahre 1811, aus der Zeit der französischen Besatzung.
+					Im Jahre 1779 wurde Kärnten von den Franzosen besetzt, die es
+					mit Unterbrechungen bis zum Jahre 1813 unter ihrer Herrschaft hielten.
+					Die Grenzlinie zwischen Illyrien und Österreich verlief über St. Egyden
+					nach Aich, sowie durch Auen bis zum Wörthersee. Na Muti (Mautamt),
+					Vulgoname des Gasthauses Bürger, erinnert noch heute an die französische
+					Besatzung.
+					
+					<h4>Getreidespeicher</h4>
+					In Schiefling sind drei alte Speicher erhalten: beim Sušec (aus dem Jahr
+					1597), beim Zima und beim Strden (aus dem Jahr 1559). Sie wurden zur
+					Aufbewahrung des Zehentes verwendet, der von der Probstei in Maria
+					Wörth eingehoben wurde. Die Getreidespeicher haben unten einen
+					Keller, darüber ist der Getreide- und
+					Fleischspeicher.
+					
+					<h4>Badestube, Backstube, Brechelstube, Dörrkammer – paštәba</h4>
+					Der Name paštәba bezeichnet eine Bade- oder
+					Backstube. Weil dieStube mit einem gemauerten Ofen ausgestattet war, wurde sie auch
+					zum Dörren und Brecheln des Flachses und zum Dörren von Obst verwendet.
+					In Schiefling wurde in der Stube auch Brot gebacken, sie diente
+					auch als Auszugshaus für die ältere Generation.
+					
+					<h4>Brechelgruben</h4>
+					Brechelgruben wurden wegen der Brandgefahr am Dorfrand ausgehoben.
+					Dort wurden aus Stangen ein Gestell erstellt und über der heißen
+					Glut Flachs getrocknet. Danach wurden die harten Flachsstengel gebrochen
+					und die weichen Flachsfasern freigelegt. Sie wurden zur Herstellung
+					einfacher Textilien verwendet.
+					
+					<h4>Die Saligen Frauen</h4>
+					Die Saligen Frauen wohnten in Krna und über Ottosch, wo sich in Felsen
+					eingemeißelte Sitzflächen bzw. Hohlräume befinden, die sogenannten
+					Sedlaže. Von da aus halfen sie den Bauern und gaben ihnen guten Rat
+					Für ihre Hilfe mussten die Bauern eine Gegenleistung in Naturalien erbringen.
+					Deshalb waren angeblich die Bäuerinnen auch sehr eifersüchtig
+					auf die Saligen Frauen.
+				</div>
+				<div id="text-5-slo" class="hidden-text">
+					Ledinska in krajinska imena poimenujejo najmanjše geografske enote:
+					gore, vrhove, doline, pobočja, gozdove, travnike, močvirja, poti, krajinske
+					dele, gozdne predele in drugo. Ledinska in krajinska imena so ljudjem služila
+					za orientacijo v njihovem bližnjem življenjskem okolju in pri njihovih
+					kmečkih opravilih, danes so pomembna kot orientacijske točke.<br />
+					Starost ledinskih imen je različna, nekatera segajo v začetke poselitve,
+					druga pa so mlajša. Ledinska imena so zrcalo zgodovinskega in jezikovnega
+					razvoja pokrajine. Nastala so v narečju, in se prenašala iz roda v rod,
+					spreminjal pa se je način izgovorjave in zapisa. S spreminjanjem načina življenja - tradicionalno
+					kmečko gospodarjenje je izginilo - so tudi ledinska
+					in krajinska imena izgubila svoj prvotni namen, a so ostala kot vir informacij
+					o neposredni okolici kraja in ljudi.
+				</div>
+				<div id="text-5-de" class="hidden-text">
+					Flur- und
+					Gebietsnamen benennen die kleinsten geografischen Einheiten:
+					Berge, Gipfel, Täler, Hänge, Wälder, Wiesen, Ackerland, Wege, Moore und
+					anderes. Flur- und Gebietsnamen dienten der Bevölkerung als Orientierungshilfen
+					in ihrem unmittelbaren Lebensraum und bei ihren bäuerlichen
+					Arbeiten. Die Flur- und Gebietsnamen sind verschieden alt, einige reichen
+					in die Zeit der Anfangsbesiedelung, andere sind jüngeren Datums. Flur- und
+					Gebietsnamen spiegeln auch die historische und sprachliche Entwicklung
+					einer Gegend und ihrer Bevölkerung wider. Die Namen wurden von Generation
+					zu Generation weitergegeben, geändert hat sich nur die Art der Aussprache
+					und der Schreibweise, nicht ihre Bedeutung. In der Marktgemeinde
+					Schiefling sind die Flur- und
+					Gebietsnamen in der Bevölkerung in slowenischer
+					Sprache verankert, obwohl deren schriftliche Nachweise in deutscher
+					Form vorliegen. Mit der Änderung der Lebensweise und dem Schwinden der
+					traditionellen bäuerlichen Bewirtschaftungsmethoden haben viele Flur- und
+					Gebietsnamen ihre ursprüngliche Bestimmung verloren, sie blieben aber als
+					Informationsquelle über die unmittelbare Umgebung und Bevölkerung erhalten.
+				</div>
+				<div id="text-6-slo" class="hidden-text">
+					Hišna imena so že od nekdaj pomembna za razpoznavanje hiš in ljudi na
+					vasi, označujejo najmanjšo naselitveno enoto, to je posest ali bivanjski
+					prostor. Pomembna so bila zlasti v časih, ko še ni bilo zemljiških knjig.
+					Ime se je držalo hiše in posestva, čeprav so se lastniki menjavali.<br />
+					Hišna imena so bila tudi osnova priimkov, imen naselij in vasi, zato so
+					dragocen del kulturne dediščine, zgodovine kraja in naroda.<br />
+					Hišna in ledinska imena imajo različne korenine in izvore: krstna
+					imena, poklicna imena, način poselitve, naravna lega.
+				</div>
+				<div id="text-6-de" class="hidden-text">
+					Seit jeher schon sind Hausnamen wichtig für die Zuordnung von Höfen
+					und der Dorfbevölkerung. Hausnamen definieren die kleinste Siedlungseinheit,
+					das ist der Hof oder der Wohnplatz. Besonders bedeutend
+					waren sie in Zeiten, als es noch keine Grundbücher gab. Die Namen hafteten
+					am Haus und Besitz, wenngleich die Besitzer wechselten.<br />
+					Aus den Hausnamen gingen Familiennamen und auch Siedlungsnamen
+					hervor, deshalb sind sie ein wertvoller Teil des Kulturerbes und der
+					Geschichte des Ortes und seiner Bevölkerung.<br />
+					Hausnamen haben verschiedene Wurzeln und Ursprünge: Taufnamen,
+					Berufsnamen, Siedlungsformen, natürliche Umgebung.
+				</div>
+				<div id="text-7-de" class="hidden-text">
+					<p>
+						<img src="img/unesco_logo.png" alt="unesco logo" /><br />
+						
+						<b>Izdajatelj | <i>Herausgeber:</i></b> Slovensko prosvetno društvo Edinost Škofiče, zanj Magda Errenst,
+						predsednica | <i>Slowenischer Kulturverein Edinost Schiefling, Magda Errenst, Obfrau</i>
+						<br />
+						<b>Zbiranje imen | <i>Dokumentation der Namen:</i></b> Magda Errenst na podlagi gradiva, literature in
+						številnih pogovorov z domačini | <i>Magda Errenst auf Grundlage von Material und Literaturquellen
+						und zahlreicher Gespräche mit Einheimischen.</i>
+						<br />
+						<b>Idejna zasnova zemljevida | <i>Idee und Redaktion:</i></b> Madga Errenst
+						<br />
+						<b>Strokovna pomoč | <i>Fachliche Hilfe:</i></b><br />
+						Slovenski narodopisni inštitut Urban Jarnik | <i>Slowenisches Volkskundeinstitut Urban Jarnik</i> – mag.
+						Martina Piko-Rustia<br />
+						Inštitut za slovenski jezik ZRC SAZU | <i>Institut für die slowenische Sprache an
+						der Slowenischen Akademie für Wissenschaften und Künste in Ljubljana</i> – dr. Matej Šekli, dr. Silvo
+						Torkar, dr. Helena Dobrovoljc<br />
+						<b>Pisni viri | <i>Schriftliche Quellen:</i></b><br />
+						Feinig, Anton: Die Namen der Bauernhöfe im Bereich der einstigen Grundherrschaft Hollenburg in
+						Kärnten. Disertacija, Univerza na Dunaju | <i>Dissertation</i>, Universität Wien 1958.<br />
+						Feinig, Anton u. Tatjana Feinig: Familiennamen in Kärnten und den benachbarten Regionen. Celovec-Dunaj-Ljubljana
+						| Klagenfurt-Wien-Ljubljana: Mohorjeva | Hermagoras 2005.<br />
+						Pohl, Heinz Dieter: Naša slovenska krajevna imena. | <i>Unsere slowenischen Ortsnamen</i>. Celovec-Dunaj-Ljubljana
+						| Klagenfurt-Wien-Ljubljana: Mohorjeva | Hermagoras 2010.<br />
+						Singer, Stephan: Kultur und Kirchengeschichte des oberen Rosentales. Samozaložba/Selbstverlag,
+						Kappel/Kapla 1935.<br />
+						Snoj, Marko: Etimološki slovar zemljepisnih imen. Ljubljana: Modrijan 2009<br />
+						Šašel, Josip: Spodnji Rož v luči krajevnih imen, v: Planinski vestnik, 56, 1956, št. 2, 88–101.<br />
+						Zdovc, Pavel: Slovenska krajevna imena na avstrijskem Koroškem. Razširjena izdaja. | <i>Die slowenischen
+						Ortsnamen in Kärnten. Erweiterte Auflage.</i> Ljubljana: SAZU 2010.<br />
+						Na poti skozi čas – Škofiče z okolico skozi 90 let. Auf dem Weg durch die Zeit – Streifzug durch 90
+						Jahre Kultur und Alltag in Schiefling und Umgebung. Založba Drava, 1997.<br />
+						Die Marktgemeinde Schiefling am See und ihre Geschichte. Izdala | Hg. von: Marktgemeinde
+						Schiefling am See, 2006.
+						<br />
+						<b>Gradivo | <i>Materialquellen:</i></b><br />
+						Jozi Pak: Karta slovenskih narečnih imen v Rožu | <i>Karte slowenischer mundartlicher Namen im
+						Rosental</i><br />
+						Josip Šašel: Arhivski zapisi imen | <i>Handschriftliche Aufzeichnungen von Namen</i>
+						<br />
+						<b>Zemljevidi s slovenskimi in hišnimi imeni</b>:<br />
+						Kotmara vas – Horni Kompájn, Konják in Hudár: Slovenska ledinska, krajinska in hišna imena |
+						Köttmannsdorf – Horni Kompájn, Konják und Hudár: Slowenische Flur,
+						Gebiets- und Hofnamen.
+						Izdalo | Hg. von: Slovensko prosvetno društvo Gorjanci/Slowenischer Kulturverein
+						Gorjanci, 2008. <a href="http://www.gorjanci.at" target="_blank">www.gorjanci.at</a> <br />
+						Življenjski prostor Sele – Lebensraum Zell. Izdala: Interesna skupnost selskih kmetov | Hg. von:
+						Interessensgemeischaft der Zeller Bauern, 2008. <a href="http://www.kosuta.at" target="_blank">www.kosuta.at</a> <br />
+						Šmarjeta v Rožu – St. Margareten im Rosental. Izdalo Kulturno društvo Šmarjeta-Apače
+						v sodelovanju s Slovenskim narodopisnim inštitutom Urban Jarnik | Hg. von: Kulturverein St. Margareten-Abtei
+						in Zusammenarbeit mit dem Slowenischen Volskundeverein Urban Jarnik, 2011.
+					</p>
+					<h4>Viri / <i>Quellen</i></h4>
+					<p>
+						Kartografični podatki izvirajo od <a href="http://www.openstreetmap.org/" target="_blank">Openstreetmap</a> z 
+						licenco <a href='http://creativecommons.org/licenses/by-sa/2.0/' target="_blank"> CC-BY-SA</a>. Zemljevid in ploščice 
+						pripravi <a href="http://mapserver.org/" target="_blank">Mapserver</a>, <a href="http://mapserver.org/trunk/mapcache/index.html" target="_blank">Mapcache</a>
+						jih razdeli.<br />
+						<i>Die Daten der Basiskarte für unsere Anwendung werden von <a href="http://www.openstreetmap.org/">Openstreetmap</a> unter 
+						<a href='http://creativecommons.org/licenses/by-sa/2.0/' target="_blank"> CC-BY-SA</a> Lizenz zu Verfügung gestellt. 
+						Sie sind noch nicht komplett, können aber von jedermann erweitert werden.
+						Die Tiles werden mit dem <a href="http://mapserver.org/" target="_blank">Mapserver</a> gerendert und mit 
+						dem <a href="http://mapserver.org/trunk/mapcache/index.html" target="_blank">Mapcache</a> verteilt.</i><br />
+						
+						Zračni posnetki pridejo od <a href="http://www.geoimage.at" target="_blank">www.geoimage.at</a>.<br />
+						<i>Die Luftbilddaten sind von <a href="http://www.geoimage.at" target="_blank">www.geoimage.at</a> und beinhalten ein Wasserzeichen.</i><br />
+						
+						Terenski model je od <a href="http://toolserver.org/~cmarqu/" target="_blank">Hillshading Hike&amp;Bike</a><br />
+						<i>Die Schummerung stammt von <a href="http://toolserver.org/~cmarqu/" target="_blank">Hillshading Hike&amp;Bike</a></i><br />
+						
+						Pisava 'Open Sans' je prirejena za naše posebne znake in je pod licenco 
+						<a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank" target="_blank">Apache License, version 2.0</a>.<br />
+						<i>Die verwendete Schrift 'Open Sans' wurde für unsere Zwecke angepasst und steht unter der 
+						<a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank" target="_blank">Apache License, version 2.0</a>. 
+						Erhältlich ist sie über <a href="http://www.google.com/webfonts/specimen/Open+Sans" target="_blank">Google Web Fonts</a></i><br />
+						
+						Piktogrami so od <a href="http://thenounproject.com/" target="_blank">The Noun Project</a>. <br />
+						<i>Die verwendeten Icons stammen von <a href="http://thenounproject.com/" target="_blank">The Noun Project</a>. </i><br />
+						
+						Copyright slik je pri Magdi Errenst, ki jih je posnela pri mnogih pohodih skozi našo občino.<br />
+						<i>Die schönen Bilder, die unsere schöne Gemeinde zeigen, wurden von Magda Errenst aufgenommen. Bei ihr liegen auch alle Rechte dafür.</i><br /><br />
+						
+						Priredba zemljevida Benjamin Preisig, 2014<br />
+						<i>Kartengestaltung Benjamin Preisig, 2014</i>
+					</p>
+				</div>
+			</div>
+		</div>
+		
+      	<div id="map"></div>
+		<div id="layerswitchButton">
+			<a href="javascript:;" onmousedown="toggleSlideH('layerswitch');"><img src="img/layerswitch.png" alt="Legenda" /></a>
+		</div>
+		<div id= "layerswitch" style="display:none;overflow:hidden;height:50px;">
+			<a href="javascript:;" onmousedown="setBase('osm_tms');"><img name="osm_tms" src="img/layer/osm_tms_v.png" alt="osm_tms" /></a> &nbsp;
+			<a href="javascript:;" onmousedown="setBase('geoimage');"><img name="geoimage" src="img/layer/geoimage_v.png" alt="geoimage" /></a>
+		</div>
+		
+		<a href="html/navodila.html" id="navodila" rel="shadowbox;height=500;width=800;title=Navodila/Anleitung">Navodila/Anleitung</a>
+		
+		<div id="panToVas">
+			<ul id="Navigation"> 
+				<li><p>Pojdi v ... /Gehe nach ...</p>
+		      		<ul>
+		        		<li><a href="#" onclick="return panToVas('dob')">Dob | Aich</a></li>
+		        		<li><a href="#" onclick="return panToVas('dobajna')">Dobajna | Dobein</a></li>
+		        		<li><a href="#" onclick="return panToVas('gorice')">Goriče | Goritschach</a></li>
+		        		<li><a href="#" onclick="return panToVas('gorincice')">Gorinčice | Gorintschach</a></li>
+		        		<li><a href="#" onclick="return panToVas('holbice')">Holbiče | Techelweg</a></li>
+		        		<li><a href="#" onclick="return panToVas('klopce')">Klopce | Penken</a></li>
+		        		<li><a href="#" onclick="return panToVas('log')">Log | Auen</a></li>
+		        		<li><a href="#" onclick="return panToVas('logavas')">Loga vas | Augsdorf</a></li>
+		        		<li><a href="#" onclick="return panToVas('nagori')">Na Gori | Höhe</a></li>
+		        		<li><a href="#" onclick="return panToVas('nagori2')">Na Gori | Rupertiberg</a></li>
+		        		<li><a href="#" onclick="return panToVas('otoz')">Otož | Ottosch</a></li>
+		        		<li><a href="#" onclick="return panToVas('paprace')">Paprače | Farrendorf</a></li>
+		        		<li><a href="#" onclick="return panToVas('pinjavas')">Pinja vas | Albersdorf</a></li>
+		        		<li><a href="#" onclick="return panToVas('podjerberk')">Podjerberk | St. Kathrein</a></li>
+		        		<li><a href="#" onclick="return panToVas('ravne')">Ravne | Raunach</a></li>
+		        		<li><a href="#" onclick="return panToVas('roda')">Roda | Roda</a></li>
+		        		<li><a href="#" onclick="return panToVas('rove')">Rove | Roach</a></li>
+		        		<li><a href="#" onclick="return panToVas('sentilj')">Šentilj | St. Egyden</a></li>
+		        		<li><a href="#" onclick="return panToVas('skofice')">Škofiče | Schiefling</a></li>
+		        		<li><a href="#" onclick="return panToVas('suha')">Suha | Zauchen</a></li>
+		        		<li><a href="#" onclick="return panToVas('trebinje')">Trebinje | Treffen</a></li>
+		        		<li><a href="#" onclick="return panToVas('zgornjedole')">Zgornje Dole | Oberdellach</a></li>
+		      		</ul>
+		    	</li>
+			</ul>
+		</div>
+		<div id="legendaButton">
+			<a href="javascript:;" onmousedown="toggleSlideW('legenda');"><img src="img/legenda.png" alt="Legenda" /></a>
+		</div>
+		<div id= "legenda" style="display:none;overflow:hidden;width:180px;">
+			<h3>Legenda</h3>
+			<p>
+				<a href="#" onclick="return resolveLayer('vasi')"><img name="vasi" src="img/layer/vasi_v.png" border="0" alt="vasi Button"></a>
+				<a href="#" onclick="return resolveLayer('krajine')"><img name="krajine" src="img/layer/krajine_u.png" border="0" alt="krajine Button"></a>
+				<a href="#" onclick="return resolveLayer('vrhovi')"><img name="vrhovi" src="img/layer/vrhovi_u.png" border="0" alt="vrhovi Button"></a>
+				<a href="#" onclick="return resolveLayer('gorsko')"><img name="gorsko" src="img/layer/gorsko_u.png" border="0" alt="gorsko Button"></a>
+				<a href="#" onclick="return resolveLayer('gorskoPod')"><img name="gorskoPod" src="img/layer/gorskoPod_u.png" border="0" alt="gorskoPod Button"></a>
+				<a href="#" onclick="return resolveLayer('ledine')"><img name="ledine" src="img/layer/ledine_u.png" border="0" alt="ledine Button"></a>
+				<a href="#" onclick="return resolveLayer('kmetije')"><img name="kmetije" src="img/layer/kmetije_u.png" border="0" alt="kmetije Button"></a>
+				<a href="#" onclick="return resolveLayer('vodotoki')"><img name="vodotoki" src="img/layer/vodotoki_u.png" border="0" alt="vodotoki Button"></a>
+				<a href="#" onclick="return resolveLayer('krizi')"><img name="krizi" src="img/layer/krizi_u.png" border="0" alt="krizi Button"></a>
+				<a href="#" onclick="return resolveLayer('mlini')"><img name="mlini" src="img/layer/mlini_u.png" border="0" alt="mlini Button"></a>
+				<img name="tericne" src="img/layer/tericne_u.png" border="0" alt="tericne Button">
+				<img name="cerkve" src="img/layer/cerkve_u.png" border="0" alt="cerkve Button">
+			</p>
+		</div>
+	</body>
+</html>
