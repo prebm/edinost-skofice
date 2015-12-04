@@ -423,10 +423,10 @@ function init(){
 
     var osm_tms = new OpenLayers.Layer.XYZ("My Map Layer",
         [
-            "http://a.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw",
-            "http://b.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw",
-            "http://c.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw",
-            "http://d.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw"
+            "https://a.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw",
+            "https://b.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw",
+            "https://c.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw",
+            "https://d.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw"
         ], 
         {
             sphericalMercator: true,
@@ -449,14 +449,14 @@ function init(){
     var geoimage = new OpenLayers.Layer.OSM(
         "Basemap Orthofoto",
         //"http://toolserver.org/~cmarqu/hill/${z}/${x}/${y}.png",
-        'http://maps1.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/${z}/${y}/${x}.jpeg',
+        'https://maps1.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/${z}/${y}/${x}.jpeg',
         {isBaseLayer:true, identifier: "geoimage", attribution:"Datenquelle: <a href='http://www.basemap.at' target='_blank'>basemap.at</a>"}
     ); 
     
     var hs = new OpenLayers.Layer.OSM(
         "Hillshade",
         //"http://toolserver.org/~cmarqu/hill/${z}/${x}/${y}.png",
-        'http://tiles.wmflabs.org/hillshading/${z}/${x}/${y}.png',
+        'https://tiles.wmflabs.org/hillshading/${z}/${x}/${y}.png',
         {isBaseLayer:false, displayInLayerSwitcher:false, minScale:218000.0, maxScale:10000.0}
     );
     
