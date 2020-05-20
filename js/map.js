@@ -423,11 +423,9 @@ function init(){
 
     var osm_tms = new OpenLayers.Layer.XYZ("My Map Layer",
         [
-            "https://a.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw",
-            "https://b.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw",
-            "https://c.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw",
-            "https://d.tiles.mapbox.com/v4/prebm.e540e59f/${z}/${x}/${y}.png?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw"
-        ], 
+					"https://a.api.mapbox.com/styles/v1/prebm/ck9stpcfv06md1iq7xjcneoh1/tiles/256/${z}/${x}/${y}?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw",
+					"https://b.api.mapbox.com/styles/v1/prebm/ck9stpcfv06md1iq7xjcneoh1/tiles/256/${z}/${x}/${y}?access_token=pk.eyJ1IjoicHJlYm0iLCJhIjoienBEMzRGNCJ9.aRunTx_yN6sagfBfcHYvGw"
+      	], 
         {
             sphericalMercator: true,
             wrapDateLine: true,
